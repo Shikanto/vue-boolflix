@@ -1,87 +1,79 @@
 <template>
   <div id="app">
-      <input v-model="filmToSearch" type="text" id="search" v-on:keyup.enter="onClick()"> 
-      <input type="button" value="Cerca" @click="onClick()">
+    <Header @searchFilmSeries="click"></Header>
+    <div class="container">
       <h1>Film</h1>
-      <ul>
-        <li v-for="film in moviesArray" :key="film.id">
-          {{film.title}} <br>
-          {{film.original_title}} <br>
-          <img :src="require(`../src/assets/${getFlag(film.original_language)}`)" alt="" /><br>
-          {{film.vote_average}}
-        </li>
-      </ul>
+      <div class="container-films_series">
+        <Card
+          v-for="(film, i) in moviesArray"
+          :key="i"
+          :infoFilm="film"
+          :flags="flagLang"
+        ></Card>
+      </div> 
       <h1>Serie</h1>
-      <ul>
-        <li v-for="serie in seriesArray" :key="serie.id">
-          {{serie.name}} <br>
-          {{serie.original_name}} <br>
-          <img :src="require(`../src/assets/${getFlag(serie.original_language)}`)" alt="" /><br>
-          {{serie.vote_average}}
-        </li>
-      </ul>
+      <div class="container-films_series">
+        <Card
+          v-for="(film, i) in seriesArray"
+          :key="i"
+          :infoFilm="film"
+          :flags="flagLang"
+        ></Card>
+      </div>
+    </div>
   </div>
 </template>
 
 <script>
 import axios from "axios";
-
+import Header from "./components/Header.vue";
+import Card from "./components/Card.vue";
 
 export default {
   name: "App",
-  components: {
-  },
+  components: { Card, Header },
   data() {
     return {
-      apiKey:"444c44e78e3dc1d94571f9837c0e1fc0",
-      apiUrl:"https://api.themoviedb.org/3",
-      moviesArray:[],
-      seriesArray:[],
-      filmToSearch:"",
+      apiKey: "444c44e78e3dc1d94571f9837c0e1fc0",
+      apiUrl: "https://api.themoviedb.org/3",
+      moviesArray: [],
+      seriesArray: [],
+      filmOrSeriesSearched: "",
       flagLang: {
-        it:"it.svg",
-        de:"de.svg",
-        fr:"fr.svg",
-        jp:"jp.svg",
-        en:"gb.svg",
-        eu:"eu.svg",
-      }
+        it: "it.svg",
+        de: "de.svg",
+        fr: "fr.svg",
+        ja: "jp.svg",
+        en: "gb.svg",
+        eu: "eu.svg",
+      },
     };
   },
   methods: {
+    //faccio la chiamata per ottenere un array dei film/serie ricercati
     getFilmOrSeries(url, listArray) {
-      axios.get(this.apiUrl + url, {
-        params: {
-          api_key: this.apiKey,
-          query: this.filmToSearch,
-        },
-        }) .then((resp) => {
-          this[listArray] = resp.data.results;
+      axios
+        .get(this.apiUrl + url, {
+          params: {
+            api_key: this.apiKey,
+            query: this.filmOrSeriesSearched,
+          },
         })
+        .then((resp) => {
+          this[listArray] = resp.data.results;
+        });
     },
-    onClick(){
+    click(filmSearched) {
+      //qui vado a prendere il dato passato dal figli Card.vue tramite $emit e lo salvo nei data
+      this.filmOrSeriesSearched = filmSearched;
+      //e poi eseguo la funzione
       this.getFilmOrSeries("/search/movie", "moviesArray");
       this.getFilmOrSeries("/search/tv", "seriesArray");
     },
-    getFlag(language) {
-
-      console.log(language)
-      if(!this.flagLang[language]) {
-        language = "eu";
-        console.log(language)
-      } else {
-
-        return this.flagLang[language]
-      }
-      return this.flagLang[language]
-    }
   },
 };
 </script>
 
 <style lang="scss">
-img{
-  width: 50px;
-  height: 20px;
-}
+@import "style/app.scss";
 </style>
