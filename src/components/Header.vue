@@ -4,12 +4,13 @@
     <div class="navbar-search">
       <h3>Cerca la tua serie o il tuo film preferito:</h3>
       <input
+        class="input-search"
         v-model="filmToSearch"
         type="text"
         id="search"
         v-on:keyup.enter="onClick()"
       />
-      <input type="button" value="Cerca" @click="onClick()" />
+      <input class="btn-search" type="button" value="Cerca" @click="onClick()" />
     </div>
   </div>
 </template>

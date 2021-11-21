@@ -3,8 +3,8 @@
     <div class="card">
         <img class="poster-film" :src="`${urlImg}${dimImg}${getPathImg()}`" alt="" />
         <div class="card-body">
-            <h2>Titolo: </h2>{{ infoFilm.title }}{{infoFilm.name}} <br>
-            <h2>Titolo Originale: </h2>{{ infoFilm.original_title }}{{infoFilm.original_name}} <br>
+            <h2>Titolo: </h2><span class="text-underline">{{ infoFilm.title }}{{infoFilm.name}}</span> <br>
+            <h2>Titolo Originale: </h2><span class="text-underline">{{ infoFilm.original_title }}{{infoFilm.original_name}}</span> <br>
             <h2>Lingua Originale: </h2>
                 <img
                 class="flag"
@@ -90,20 +90,4 @@ export default {
 </script>
 <style lang="scss" scoped>
 
-
-.yellow{
-    color:yellow;
-}
-.white{
-    color:white;
-}
-i{
-    letter-spacing: 3px;
-}
-.text-centre{
-    text-align: center;
-}
-.overview{
-    margin: 0;
-}
 </style>
